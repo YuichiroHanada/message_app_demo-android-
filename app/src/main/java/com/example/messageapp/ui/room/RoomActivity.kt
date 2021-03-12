@@ -4,73 +4,59 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.example.messageapp.R
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-
-val api = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl("http://10.0.2.2:8082")
-    .build().create(ApiInterface::class.java)
-
-data class RoomResp(
-    val roomId: Int,
-    val roomName: String
-)
-
-interface ApiInterface {
-    @GET("/room/show")
-    suspend fun getRoom(@Header("Cookie") userCookie: String): Response<List<RoomResp>>
-}
-
-suspend fun getRequest(userCookie: String): Response<List<RoomResp>>? {
-    try {
-        val response: Response<List<RoomResp>> = api.getRoom(userCookie)
-        return response
-    } catch (e: Exception) {
-        return null
-    }
-}
-
-
+import androidx.recyclerview.widget.RecyclerView
 
 class RoomActivity : AppCompatActivity() {
+
+//    private lateinit var viewModel: RoomViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
 
-        val data = getSharedPreferences("Data", Context.MODE_PRIVATE)
+//        val data = getSharedPreferences("Data", Context.MODE_PRIVATE)
+//
+//        val cookie = data.getString("cookie", null)
 
-        val cookie = data.getString("cookie", null)
+//        val recyclerView = findViewById<RecyclerView>(R.id.rooms)
 
-
-        Log.d("roomActivity ", "start")
-
-        lifecycleScope.launch {
-
-            if (cookie != null) {
-
-                Log.d("roomActivity cookie ", cookie)
-
-                val response = getRequest(cookie)
-                if (response != null) {
-                    Log.d("response ", response.body().toString())
-
-                } else {
-                    Log.d("response null ", "yes")
-                }
-
-            } else {
-
-                Log.d("roomActivity cookie null", "yes")
-            }
+//        viewModel = ViewModelProvider(this, RoomViewModelFactory())
+//            .get(RoomViewModel::class.java)
+//
+//        if (cookie != null) {
+//            viewModel.roomShow(cookie)
+//
+//        } else {
+//            Log.d("roomActivity cookie", "null")
+//        }
 
 
+        if (savedInstanceState == null) {
+            //プロジェクト一覧のFragment
+            val fragment = RoomListFragment()
+
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragment_container, fragment, TAG_OF_Room_LIST_FRAGMENT)
+                    .commit()
         }
     }
+
+
+
+
+
+//        val binding = DataBindingUtil.setContentView<ActivityRoomBinding>(this, R.layout.activity_room)
+//        binding.viewModel = viewModel
+//        binding.lifecycleOwner = this
+//
+//
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+////ここでadapterを作成するときにlifecycleOwnerを渡す！
+//        val adapter = RoomAdapter(viewModel, this)
+//
+//        recyclerView.adapter = adapter
+
 }
