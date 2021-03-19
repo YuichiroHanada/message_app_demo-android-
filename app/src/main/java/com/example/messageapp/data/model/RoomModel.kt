@@ -10,4 +10,6 @@ data class Room(private val recordJSON: JSONObject){
 
     val roomId: Int = recordJSON.getInt("roomId")
     val roomName: String = recordJSON.getString("roomName")
+    val myId: Int = recordJSON.getInt("myId")
+    val yourId: Int = recordJSON.getInt("yourId")
 }
