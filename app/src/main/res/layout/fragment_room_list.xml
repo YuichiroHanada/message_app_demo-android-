@@ -5,6 +5,9 @@
 
     <data>
         <variable name="isLoading" type="boolean"/>
+        <variable
+            name="viewModel"
+            type="com.example.messageapp.ui.room.RoomViewModel" />
     </data>
 
     <LinearLayout
@@ -13,37 +16,67 @@
         android:background="@color/cardview_light_background"
         android:orientation="vertical"
         tools:ignore="PrivateResource">
-        <TextView
-            android:id="@+id/loading_projects"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/loading_projects"
-            android:textAlignment="center"
-            app:visibleGone="@{isLoading}"/>
-        <LinearLayout
+
+<!--        <TextView-->
+<!--            android:id="@+id/loading_projects"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_vertical|center_horizontal"-->
+<!--            android:text="@string/loading_projects"-->
+<!--            android:textAlignment="center"-->
+<!--            app:visibleGone="@{isLoading}" />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/cardview_light_background"
             android:orientation="vertical"
             app:visibleGone="@{!isLoading}">
+
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:text="@string/all_room"
+                android:textAlignment="center"
                 android:textSize="@dimen/project_header1"
-                android:text="@string/github_projects"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:textAlignment="center"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logout" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/roomList"
-                android:contentDescription="@string/project_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/project_list"
                 app:layoutManager="LinearLayoutManager"
-                />
-        </LinearLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#03A9F4"
+                android:onClick="@{() -> viewModel.logoutOnClick()}"
+                android:text="@string/logout"
+                app:layout_constraintEnd_toStartOf="@+id/addFriend"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/addFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#4CAF50"
+                android:onClick="@{() -> viewModel.addOnClick()}"
+                android:text="@string/addFriend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>
