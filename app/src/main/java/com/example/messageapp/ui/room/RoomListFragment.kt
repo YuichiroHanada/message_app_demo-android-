@@ -1,6 +1,7 @@
 package com.example.messageapp.ui.room
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.messageapp.R
+import com.example.messageapp.data.EventObserver
 import com.example.messageapp.data.model.Room
 import com.example.messageapp.databinding.FragmentRoomListBinding
 
@@ -24,10 +26,6 @@ const val TAG_OF_Room_LIST_FRAGMENT = "RoomListFragment"
 
 class RoomListFragment : Fragment() {
 
-
-
-//    private val viewModel by lazy { ViewModelProviders.of(this, factory).get(RoomViewModel::class.java) }
-
     private lateinit var binding: FragmentRoomListBinding
     private lateinit var roomAdapter: RoomShowAdapter
 
@@ -36,7 +34,11 @@ class RoomListFragment : Fragment() {
     private val projectClickCallback = object : RoomClickCallback {
         override fun onClick(room: Room) {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) && activity is RoomActivity) {
-//                (activity as RoomActivity).show(project)
+                val roomId = room.roomId
+                val roomName = room.roomName
+                val myId = room.myId
+                val yourId = room.yourId
+                (activity as RoomActivity).showMessage(roomId, roomName, myId, yourId)
             }
         }
     }
@@ -52,25 +54,6 @@ class RoomListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_list, container, false)
-
-        roomAdapter = RoomShowAdapter(projectClickCallback)
-
-        binding.apply {
-            roomList.adapter = roomAdapter
-            isLoading = true
-        }
-
-        // Inflate the layout for this fragment
-        return binding.root
-    }
-
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
         val data = activity?.getSharedPreferences("Data", Context.MODE_PRIVATE)
 
 
@@ -85,11 +68,25 @@ class RoomListFragment : Fragment() {
             requireActivity().application, cookie ?: ""
         )
 
-        val viewModel by lazy { ViewModelProviders.of(this, factory).get(RoomViewModel::class.java) }
+        val roomViewModel by lazy { ViewModelProviders.of(this, factory).get(RoomViewModel::class.java) }
 
 
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_list, container, false)
 
-        observeViewModel(viewModel)
+        roomAdapter = RoomShowAdapter(projectClickCallback)
+
+        binding.apply {
+            roomList.adapter = roomAdapter
+            isLoading = true
+            viewModel = roomViewModel
+        }
+
+
+        observeViewModel(roomViewModel)
+
+
+        // Inflate the layout for this fragment
+        return binding.root
     }
 
     //observe開始
@@ -102,6 +99,19 @@ class RoomListFragment : Fragment() {
                 roomAdapter.setProjectList(roomShowResult.success)
             }
         })
+
+
+        viewModel.onAdd.observe(viewLifecycleOwner, EventObserver {
+
+            (activity as RoomActivity).changeAddFriend()
+        })
+
+        viewModel.onLogout.observe(viewLifecycleOwner, EventObserver {
+
+            (activity as RoomActivity).logout()
+        })
+
+
     }
 
 

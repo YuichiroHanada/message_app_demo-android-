@@ -1,13 +1,11 @@
 package com.example.messageapp.ui.room
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.messageapp.R
 import com.example.messageapp.RoomRepository
-import com.example.messageapp.ui.login.LoggedInUserView
-import com.example.messageapp.ui.login.LoginResult
+import com.example.messageapp.data.Event
 import kotlinx.coroutines.launch
 
 class RoomViewModel(application: Application, cookie: String):  AndroidViewModel(application) {
@@ -16,6 +14,12 @@ class RoomViewModel(application: Application, cookie: String):  AndroidViewModel
     private val roomRepository = RoomRepository.instance
 
     val roomShowResult: MutableLiveData<RoomShowResult> = MutableLiveData()
+
+    val addFriendResult: MutableLiveData<AddFriendResult> = MutableLiveData()
+
+    val onAdd = MutableLiveData<Event<String>>()
+
+    val onLogout = MutableLiveData<Event<String>>()
 
 
 
@@ -42,14 +46,56 @@ class RoomViewModel(application: Application, cookie: String):  AndroidViewModel
                     roomShowResult.value = RoomShowResult(error = R.string.getRooms_failed)
                 }
             } catch (e: Exception) {
-                Log.e("loadProject:Failed", e.stackTrace.toString())
+                Log.e("roomShow:Failed", e.stackTrace.toString())
             }
         }
 
     }
 
 
-    fun messageShow(roomId: Int) {
+    fun addFriend(cookie: String, address: String) {
+
+
+        viewModelScope.launch {
+            try {
+                val response = roomRepository.addFriend(cookie, address)
+                if (response.isSuccessful) {
+
+                    if (response.body()!!) {
+                        addFriendResult.value = AddFriendResult(success = response.body())
+
+                    } else {
+                        addFriendResult.value = AddFriendResult(error = R.string.addFriend_failed)
+                        Log.d("roomResponse", "null")
+                    }
+                } else {
+                    addFriendResult.value = AddFriendResult(error = R.string.connection_failed)
+                }
+            } catch (e: Exception) {
+                Log.e("addFriend:Failed", e.stackTrace.toString())
+            }
+        }
+    }
+
+    fun addOnClick() {
+        onAdd.value = Event("onAdd")
+    }
+
+    fun logoutOnClick() {
+        onLogout.value = Event("onLogout")
+
+        viewModelScope.launch {
+            try {
+                val response = roomRepository.logout()
+                if (response.isSuccessful) {
+                    Log.d("logout connection", "success")
+                } else {
+                  Log.e("logout connection", "failed")
+                }
+            } catch (e: Exception) {
+                Log.e("loadProject:Failed", e.stackTrace.toString())
+            }
+        }
 
     }
 
