@@ -10,15 +10,14 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-
 import com.example.messageapp.R
+import com.example.messageapp.ui.create.CreateActivity
 import com.example.messageapp.ui.room.RoomActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -30,9 +29,10 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
-        val username = findViewById<EditText>(R.id.username)
+        val username = findViewById<EditText>(R.id.account)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
+        val register = findViewById<Button>(R.id.create)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
         val data = getSharedPreferences("Data", Context.MODE_PRIVATE)
@@ -104,16 +104,21 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+
+        register.setOnClickListener {
+            val intent = Intent(this, CreateActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        Log.d("updateUi ", "ok")
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         val intent = Intent(this, RoomActivity::class.java)
-//                intent.putExtra("discount", discount)
         startActivity(intent)
-        // TODO : initiate successful logged in experience
+
         Toast.makeText(
             applicationContext,
             "$welcome $displayName",

@@ -18,16 +18,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-
-
-
-
-//    init {
-//        login(username: String, password: String)
-//    }
-
     public fun login(username: String, password: String) {
-        //viewModelScope->ViewModel.onCleared() のタイミングでキャンセルされる CoroutineScope
         viewModelScope.launch {
             try {
                 val project = loginRepository.login(username, password)
@@ -40,12 +31,11 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                     } else {
                         Log.d("coockie null", "yes")
                     }
-//                    _loginResult.value = LoginResult(success = project.headers().get("Set-Cookie")?.let { LoggedInUserView(displayName = username, cookie = it) })
                 } else {
                     _loginResult.value = LoginResult(error = R.string.login_failed)
                 }
             } catch (e: Exception) {
-                Log.e("loadProject:Failed", e.stackTrace.toString())
+                Log.e("login:Failed", e.stackTrace.toString())
             }
         }
     }
