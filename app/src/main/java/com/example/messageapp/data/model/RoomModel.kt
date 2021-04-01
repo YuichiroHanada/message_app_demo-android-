@@ -2,7 +2,7 @@ package com.example.messageapp.data.model
 
 import org.json.JSONObject
 
-class RoomModel(val room: Room) {
+class RoomModel() {
 }
 
 
