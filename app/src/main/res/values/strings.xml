@@ -3,10 +3,37 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_name">Name</string>
+    <string name="action_sign_in">Sign in </string>
+    <string name="register">register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_name">Name is blank</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="register_failed">register failed</string>
+    <string name="register_finished">登録完了！</string>
+    <string name="first_register">登録がまだの方</string>
+    <string name="getRooms_failed">"get rooms failed</string>
+    <string name="addFriend_failed">友達追加が失敗しました。既に相手が登録しているか、アドレスが間違っている可能性があります。</string>
+    <string name="connection_failed">http connection error</string>
+    <string name="addFriend_caution">＊相手が追加していた場合は新たに登録できません。その場合は一覧に相手がいるはずです。</string>
+    <string name="addFriend">友達追加</string>
+    <string name="add_success">を追加しました！</string>
+    <string name="logout">ログアウト</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="room_name">roomName</string>
+    <string name="loading_projects">Loading projects …</string>
+    <string name="all_room">メッセージ</string>
+    <string name="project_list">Project List</string>
+    <string name="reload">リロード</string>
+    <string name="error">Error</string>
+    <string name="options">Options</string>
+    <string name="clear_messages">Clear Messages</string>
+    <string name="send_picture">Send Picture</string>
+    <string name="title_activity_create">CreateActivity</string>
+    <string name="hello_world">Hello Square World!</string>
+    <string name="title_activity_friend">FriendActivity</string>
+
 </resources>
